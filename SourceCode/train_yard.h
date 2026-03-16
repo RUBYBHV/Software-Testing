@@ -20,6 +20,33 @@ typedef struct {
     int numOfCars;
     int numOfEngines;
     float totalWeight;
-} train;
+} train
+
+/*
+ Function Name: addCar
+ 
+ Description:
+ This function is meant to add a car to the train while
+ checking the order, weight, and safety concerns before
+ doing so.
+ 
+ The function must verify that engines appear only at
+ the beginning of the train, system weight does not
+ exceed the maximum, and that the engine pulling
+ capacity is not exceeded.
+ 
+ Parameters:
+ 
+ train* t = pointer to the train struct
+ 
+ int type = an integer to specify the type of car(engine, food, wood, oil)
+ 
+ float weight = a floating point number to specify the weight of the car
+ 
+ Returns:
+ 1 = car added successfully
+ 0 = failed to add car
+ */
+int addCar(train* t, int type, float weight);
 
 #endif
