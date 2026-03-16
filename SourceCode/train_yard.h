@@ -49,4 +49,63 @@ typedef struct {
  */
 int addCar(train* t, int type, float weight);
 
+/*
+Function Name: removeCar
+ 
+Description:
+Removes a train car from a chosen position from the train.
+Function will check that removing a car does not
+violate a safety condition before removing a car for
+example a wood car ending up next to an oil car due to
+the previous car being removed.
+ 
+Parameters:
+train* t = pointer to the train struct
+ 
+int index = position of car to remove from train
+ 
+Returns:
+1 = car was removed successfully
+0 = car was not removed
+*/
+int removeCar(train* t, int index);
+
+/*
+Function Name: checkTrainSafety
+ 
+Description:
+Function for checking if the train passes all safety concerns.
+The train must have atleast one engine, must not have an
+oil car right after any engine car, and no wood and oil
+cars next to eachother.
+ 
+Parameters:
+const train* t = pointer to the train struct
+ 
+Returns:
+1 = Train passes the check
+0 = Train does not pass the check
+*/
+int checkTrainSafety(const train* t);
+
+/*
+Function Name: displayTrain
+ 
+Description:
+Function displays the current train cars that the train
+has from first to last.
+The function will print the cars positions in the
+train, the car types, and the car weights.
+ 
+Parameters:
+const train* t = pointer to the train struct to display
+                 the cars
+ 
+Returns:
+void = this function only displays the train
+       information and does not return a value
+
+*/
+void displayTrain(const train* t);
+
 #endif
