@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35806.99 d17.13
+VisualStudioVersion = 17.13.35806.99
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TrainYard", "TrainYard.vcxproj", "{E505EAEE-C5A2-44E3-81FB-4B5C3C6968A4}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TrainYardTests", "..\TrainYardTests\TrainYardTests.vcxproj", "{01838603-E1A8-C526-1FD8-382E70DF9506}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,14 @@ Global
 		{E505EAEE-C5A2-44E3-81FB-4B5C3C6968A4}.Release|x64.Build.0 = Release|x64
 		{E505EAEE-C5A2-44E3-81FB-4B5C3C6968A4}.Release|x86.ActiveCfg = Release|Win32
 		{E505EAEE-C5A2-44E3-81FB-4B5C3C6968A4}.Release|x86.Build.0 = Release|Win32
+		{01838603-E1A8-C526-1FD8-382E70DF9506}.Debug|x64.ActiveCfg = Debug|x64
+		{01838603-E1A8-C526-1FD8-382E70DF9506}.Debug|x64.Build.0 = Debug|x64
+		{01838603-E1A8-C526-1FD8-382E70DF9506}.Debug|x86.ActiveCfg = Debug|Win32
+		{01838603-E1A8-C526-1FD8-382E70DF9506}.Debug|x86.Build.0 = Debug|Win32
+		{01838603-E1A8-C526-1FD8-382E70DF9506}.Release|x64.ActiveCfg = Release|x64
+		{01838603-E1A8-C526-1FD8-382E70DF9506}.Release|x64.Build.0 = Release|x64
+		{01838603-E1A8-C526-1FD8-382E70DF9506}.Release|x86.ActiveCfg = Release|Win32
+		{01838603-E1A8-C526-1FD8-382E70DF9506}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
