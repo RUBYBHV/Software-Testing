@@ -37,7 +37,40 @@ int main(void) {
 
 int addCar(train* t, int type, float weight) 
 {
-    return 0;
+    if (t == NULL || t->numOfCars >= MAX_CARS) {
+        return 0;
+    }
+
+    if (t->totalWeight + weight > MAX_WEIGHT) {
+        return 0;
+    }
+
+    int newNumOfEngines = t->numOfEngines;
+    if (type == TYPE_ENGINE) {
+        newNumOfEngines++;
+    }
+
+    if (t->totalWeight + weight > newNumOfEngines * ENGINE_PULL_CAP) {
+        return 0;
+    }
+
+    if (type == TYPE_ENGINE) {
+        // Cannot add an engine if there are non-engine cars already
+        if (t->numOfCars > t->numOfEngines) {
+            return 0;
+        }
+    }
+
+    t->cars[t->numOfCars].type = type;
+    t->cars[t->numOfCars].weight = weight;
+    t->numOfCars++;
+    t->totalWeight += weight;
+
+    if (type == TYPE_ENGINE) {
+        t->numOfEngines++;
+    }
+
+    return 1;
 }
 
 int removeCar(train* t, int index) 
