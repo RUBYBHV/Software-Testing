@@ -34,3 +34,30 @@ int main(void) {
     }
     return 0;
 }
+
+int addCar(train* t, int type, float weight) 
+{
+    return 0;
+}
+
+int removeCar(train* t, int index) 
+{
+    return 0;
+}
+
+//placeholder to check if test works
+int checkTrainSafety(const train* t)
+{
+    //if statement that returns a 0
+    //if the train lacks an engine
+    if (t->numOfEngines == 0) {
+        return 0;
+    }
+
+    return 1;
+}
+
+void displayTrain(const train* t) 
+{
+    return;
+}
