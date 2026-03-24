@@ -122,7 +122,7 @@ namespace TrainYardTests
 			
 	};
 
-	TEST_CLASS(BB_safetycheck)
+	TEST_CLASS(BB_checktrainsafety)
 	{
 	public:
 

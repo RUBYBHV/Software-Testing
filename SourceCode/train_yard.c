@@ -145,5 +145,25 @@ int checkTrainSafety(const train* t)
 
 void displayTrain(const train* t) 
 {
-    return;
+    // Validate input
+    if (t == NULL) {
+        return;
+    }
+
+    // Handle empty train
+    if (t->numOfCars == 0) {
+        printf("Train is empty.\n");
+        return;
+    }
+
+    // Print each car in order
+    for (int i = 0; i < t->numOfCars; i++) {
+        printf("Car %d - Type: %d, Weight: %.1f\n",
+            i,
+            t->cars[i].type,
+            t->cars[i].weight);
+    }
+
+    // Print total weight
+    printf("Total Weight: %.1f\n", t->totalWeight);
 }
