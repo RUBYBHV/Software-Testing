@@ -65,9 +65,59 @@ namespace TrainYardTests
 	{
 	public:
 
-		TEST_METHOD(BB005_NoEngineIsUnsafe)
+		TEST_METHOD(BB005_RemoveValidCar)
 		{
-			Assert::AreEqual(1, 1);
+			// Verifies that removing a valid car index succeeds
+			train t = { 0 };
+
+			addCar(&t, TYPE_ENGINE, 1000);
+			addCar(&t, TYPE_FOOD, 500);
+			addCar(&t, TYPE_WOOD, 500);
+
+			int result = removeCar(&t, 1);
+
+			Assert::AreEqual(1, result);
+		}
+
+		TEST_METHOD(BB006_RemoveInvalidIndexFails)
+		{
+			// Ensures removal fails when index is out of bounds
+			train t = { 0 };
+
+			addCar(&t, TYPE_ENGINE, 1000);
+
+			int result = removeCar(&t, 5);
+
+			Assert::AreEqual(0, result);
+		}
+
+		TEST_METHOD(BB007_WoodOilAdjacencyBlocked)
+		{
+			// Ensures removal is blocked if it creates WOOD-OIL adjacency
+			train t = { 0 };
+
+			addCar(&t, TYPE_ENGINE, 1000);
+			addCar(&t, TYPE_WOOD, 500);
+			addCar(&t, TYPE_FOOD, 500);
+			addCar(&t, TYPE_OIL, 500);
+
+			int result = removeCar(&t, 2);
+
+			Assert::AreEqual(0, result);
+		}
+
+		TEST_METHOD(BB008_RemoveLastCar)
+		{
+			// Verifies that removing the last car works correctly
+			train t = { 0 };
+
+			addCar(&t, TYPE_ENGINE, 1000);
+			addCar(&t, TYPE_FOOD, 500);
+			addCar(&t, TYPE_WOOD, 500);
+
+			int result = removeCar(&t, 2);
+
+			Assert::AreEqual(1, result);
 		}
 			
 	};
@@ -98,15 +148,101 @@ namespace TrainYardTests
 			//marking the train as unsafe
 			Assert::AreEqual(0, result);
 		}
+
+		TEST_METHOD(BB010_OilAfterEngineUnsafe)
+		{
+			// Ensures that oil directly after engines fails safety rules
+			train t = { 0 };
+
+			addCar(&t, TYPE_ENGINE, 1000);
+			addCar(&t, TYPE_OIL, 500);
+
+			int result = checkTrainSafety(&t);
+
+			Assert::AreEqual(0, result);
+		}
+
+		TEST_METHOD(BB011_WoodNextToOilUnsafe)
+		{
+			// Verifies that WOOD next to OIL fails safety check
+			train t = { 0 };
+
+			addCar(&t, TYPE_ENGINE, 1000);
+			addCar(&t, TYPE_WOOD, 500);
+			addCar(&t, TYPE_OIL, 500);
+
+			int result = checkTrainSafety(&t);
+
+			Assert::AreEqual(0, result);
+		}
+
+		TEST_METHOD(BB012_ValidTrainSafe)
+		{
+			// Confirms that a valid train configuration passes safety check
+			train t = { 0 };
+
+			addCar(&t, TYPE_ENGINE, 1000);
+			addCar(&t, TYPE_FOOD, 500);
+			addCar(&t, TYPE_WOOD, 500);
+
+			int result = checkTrainSafety(&t);
+
+			Assert::AreEqual(1, result);
+		}
 	};
 
 	TEST_CLASS(BB_displayTrain)
 	{
 	public:
 
-		TEST_METHOD(BB013_displayempty)
+		TEST_METHOD(BB013_DisplayEmpty)
 		{
-			Assert::AreEqual(1, 1);
+			// Ensures display function handles empty train without crashing
+			train t = { 0 };
+
+			displayTrain(&t);
+
+			Assert::IsTrue(true);
+		}
+
+		TEST_METHOD(BB014_DisplayOneCar)
+		{
+			// Verifies display works with a single car
+			train t = { 0 };
+
+			addCar(&t, TYPE_ENGINE, 1000);
+
+			displayTrain(&t);
+
+			Assert::IsTrue(true);
+		}
+
+		TEST_METHOD(BB015_DisplayMultipleCars)
+		{
+			// Ensures display handles multiple cars correctly
+			train t = { 0 };
+
+			addCar(&t, TYPE_ENGINE, 1000);
+			addCar(&t, TYPE_FOOD, 500);
+			addCar(&t, TYPE_WOOD, 500);
+
+			displayTrain(&t);
+
+			Assert::IsTrue(true);
+		}
+
+		TEST_METHOD(BB016_DisplayMaxCars)
+		{
+			// Verifies display works when train is at maximum capacity
+			train t = { 0 };
+
+			for (int i = 0; i < MAX_CARS; i++) {
+				addCar(&t, TYPE_ENGINE, 100);
+			}
+
+			displayTrain(&t);
+
+			Assert::IsTrue(true);
 		}
 			
 	};
