@@ -78,13 +78,34 @@ int removeCar(train* t, int index)
     return 0;
 }
 
-//placeholder to check if test works
 int checkTrainSafety(const train* t)
 {
-    //if statement that returns a 0
-    //if the train lacks an engine
+    // Validate input
+    if (t == NULL) {
+        return 0;
+    }
+
+    // Must have at least one engine
     if (t->numOfEngines == 0) {
         return 0;
+    }
+
+    // First freight car cannot be OIL
+    if (t->numOfCars > t->numOfEngines) {
+        if (t->cars[t->numOfEngines].type == TYPE_OIL) {
+            return 0;
+        }
+    }
+
+    // Ensure WOOD and OIL are not adjacent
+    for (int i = 0; i < t->numOfCars - 1; i++) {
+        int current = t->cars[i].type;
+        int next = t->cars[i + 1].type;
+
+        if ((current == TYPE_WOOD && next == TYPE_OIL) ||
+            (current == TYPE_OIL && next == TYPE_WOOD)) {
+            return 0;
+        }
     }
 
     return 1;
