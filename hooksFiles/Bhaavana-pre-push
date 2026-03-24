@@ -1,0 +1,15 @@
+#!/bin/sh
+# pre-push - Final Safety Check
+echo "Running pre-push hook... Performing final safety checks."
+
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+# Prevent direct pushes to main/master branches to enforce PR reviews
+if [ "$current_branch" = "main" ] || [ "$current_branch" = "master" ]; then
+    echo "[ERROR] Direct pushes to $current_branch are prohibited!"
+    echo "Please branch off, commit your work, and submit a Pull Request instead."
+    exit 1
+fi
+
+echo "[OK] Pre-push safety checks passed. Allowed to push."
+exit 0

@@ -61,6 +61,31 @@ namespace TrainYardTests
 		}
 	};
 
+	TEST_CLASS(WB_addCar)
+	{
+	public:
+
+		TEST_METHOD(WB001_AddCarNullTrain)
+		{
+			// White-box test covering branch: if (t == NULL)
+			int result = addCar(NULL, TYPE_ENGINE, 1000.0f);
+			Assert::AreEqual(0, result);
+		}
+
+		TEST_METHOD(WB002_AddCarMaxCarsReached)
+		{
+			// White-box test covering branch: if (t->numOfCars >= MAX_CARS)
+			train t{};
+			// Manually configuring internal state to test the specific capacity boundary condition
+			t.numOfCars = MAX_CARS;
+			t.numOfEngines = MAX_CARS;
+			t.totalWeight = 0.0f;
+
+			int result = addCar(&t, TYPE_ENGINE, 10.0f);
+			Assert::AreEqual(0, result);
+		}
+	};
+
 	TEST_CLASS(BB_removeCar)
 	{
 	public:
@@ -245,5 +270,70 @@ namespace TrainYardTests
 			Assert::IsTrue(true);
 		}
 			
+	};
+
+	TEST_CLASS(WB_removeCar)
+	{
+	public:
+		TEST_METHOD(WB003_RemoveCarNullTrain)
+		{
+			// White-box test covering branch: if (t == NULL || ...)
+			int result = removeCar(NULL, 0);
+			Assert::AreEqual(0, result);
+		}
+
+		TEST_METHOD(WB004_RemoveCarInvalidIndexNegative)
+		{
+			// White-box test covering branch: if (... || index < 0 || ...)
+			train t = { 0 };
+			addCar(&t, TYPE_ENGINE, 1000);
+			int result = removeCar(&t, -1);
+			Assert::AreEqual(0, result);
+		}
+	};
+
+	TEST_CLASS(WB_checktrainsafety)
+	{
+	public:
+		TEST_METHOD(WB005_CheckSafetyNullTrain)
+		{
+			// White-box test covering branch: if (t == NULL)
+			int result = checkTrainSafety(NULL);
+			Assert::AreEqual(0, result);
+		}
+
+		TEST_METHOD(WB006_CheckSafetySingleEngineSkipsLoop)
+		{
+			// White-box test covering branch bypass: for loop condition is bypassed when numOfCars == 1
+			train t = { 0 };
+			t.numOfCars = 1;
+			t.numOfEngines = 1;
+			t.cars[0].type = TYPE_ENGINE;
+			t.cars[0].weight = 1000;
+			int result = checkTrainSafety(&t);
+			Assert::AreEqual(1, result);
+		}
+	};
+
+	TEST_CLASS(WB_displayTrain)
+	{
+	public:
+		TEST_METHOD(WB007_DisplayTrainNull)
+		{
+			// White-box test covering branch: if (t == NULL)
+			// displayTrain should return immediately without crashing or executing rest of code
+			displayTrain(NULL);
+			Assert::IsTrue(true);
+		}
+
+		TEST_METHOD(WB008_DisplayTrainSkipsLoopEmpty)
+		{
+			// White-box test covering branch: if (t->numOfCars == 0)
+			train t = { 0 };
+			t.numOfCars = 0;
+			// Call should trigger the empty train print and return before the loop execution
+			displayTrain(&t);
+			Assert::IsTrue(true);
+		}
 	};
 }

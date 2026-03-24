@@ -1,0 +1,15 @@
+#!/bin/sh
+# commit-msg - Message Quality Check
+echo "Running commit-msg hook... Checking message quality."
+
+commit_msg_file=$1
+commit_msg=$(cat "$commit_msg_file")
+
+# Basic check: Ensure message is at least 10 characters long
+if [ ${#commit_msg} -lt 10 ]; then
+    echo "[ERROR] Commit message is too short (${#commit_msg} chars). Please provide a descriptive message."
+    exit 1
+fi
+
+echo "[OK] Commit message quality is acceptable."
+exit 0
