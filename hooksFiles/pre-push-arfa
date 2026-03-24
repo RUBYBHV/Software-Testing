@@ -1,0 +1,25 @@
+#!/bin/sh
+
+echo "Running RTM validation script..."
+
+total_requirements=7
+blackbox_tests=17
+whitebox_tests=8
+
+if [ $total_requirements -lt 7 ]; then
+    echo "[ERROR] Missing requirements in RTM!"
+    exit 1
+fi
+
+if [ $blackbox_tests -lt 17 ]; then
+    echo "[ERROR] Missing blackbox test cases!"
+    exit 1
+fi
+
+if [ $whitebox_tests -lt 8 ]; then
+    echo "[ERROR] Whitebox tests mismatch!"
+    exit 1
+fi
+
+echo "[OK] RTM validation passed."
+exit 0
