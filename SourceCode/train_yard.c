@@ -75,7 +75,39 @@ int addCar(train* t, int type, float weight)
 
 int removeCar(train* t, int index) 
 {
-    return 0;
+    // Checks that train exists and index is valid
+    if (t == NULL || index < 0 || index >= t->numOfCars) {
+        return 0;
+    }
+
+    // Stops WOOD car being next to OIL after removal
+    if (index > 0 && index < t->numOfCars - 1) {
+        int left = t->cars[index - 1].type;
+        int right = t->cars[index + 1].type;
+
+        if ((left == TYPE_WOOD && right == TYPE_OIL) ||
+            (left == TYPE_OIL && right == TYPE_WOOD)) {
+            return 0;
+        }
+    }
+
+    // Update engine count if removing an engine
+    if (t->cars[index].type == TYPE_ENGINE) {
+        t->numOfEngines--;
+    }
+
+    // Update total weight
+    t->totalWeight -= t->cars[index].weight;
+
+    // Shift cars left to fill gap
+    for (int i = index; i < t->numOfCars - 1; i++) {
+        t->cars[i] = t->cars[i + 1];
+    }
+
+    // Reduce car count
+    t->numOfCars--;
+
+    return 1;
 }
 
 int checkTrainSafety(const train* t)
