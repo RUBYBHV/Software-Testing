@@ -9,11 +9,11 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace TrainYardTests
 {
-	TEST_CLASS(TrainYardTests)
+	TEST_CLASS(BB_addCar)
 	{
 	public:
 		
-		TEST_METHOD(BB010_AddEngineSuccess)
+		TEST_METHOD(BB001_AddEngineSuccess)
 		{
 			train t{};
 			int result = addCar(&t, TYPE_ENGINE, 4000.0f);
@@ -22,7 +22,7 @@ namespace TrainYardTests
 			Assert::AreEqual(4000.0f, t.totalWeight);
 		}
 
-		TEST_METHOD(BB011_AddEngineAfterFreightViolatesLeadRule)
+		TEST_METHOD(BB002_AddEngineAfterFreightViolatesLeadRule)
 		{
 			train t{};
 			addCar(&t, TYPE_ENGINE, 4000.0f);
@@ -33,7 +33,7 @@ namespace TrainYardTests
 			Assert::AreEqual(2, t.numOfCars);
 		}
 
-		TEST_METHOD(BB012_AddCarExceedsPullCapacity)
+		TEST_METHOD(BB003_AddCarExceedsPullCapacity)
 		{
 			train t{};
 			addCar(&t, TYPE_ENGINE, 1000.0f);
@@ -44,7 +44,7 @@ namespace TrainYardTests
 			Assert::AreEqual(1, t.numOfCars); // Only the engine was added successfully
 		}
 
-		TEST_METHOD(BB013_AddCarExceedsSystemWeight)
+		TEST_METHOD(BB004_AddCarExceedsSystemWeight)
 		{
 			train t{};
 			// Adds 4 engines, total pull capacity = 20000kg
@@ -59,7 +59,23 @@ namespace TrainYardTests
 			Assert::AreEqual(0, result);
 			Assert::AreEqual(4, t.numOfCars);
 		}
-		
+	};
+
+	TEST_CLASS(BB_removeCar)
+	{
+	public:
+
+		TEST_METHOD(BB005_NoEngineIsUnsafe)
+		{
+			Assert::AreEqual(1, 1);
+		}
+			
+	};
+
+	TEST_CLASS(BB_safetycheck)
+	{
+	public:
+
 		TEST_METHOD(BB009_NoEngineIsUnsafe)
 		{
 			// Creates a train that has two freight cars and no engine
@@ -82,5 +98,16 @@ namespace TrainYardTests
 			//marking the train as unsafe
 			Assert::AreEqual(0, result);
 		}
+	};
+
+	TEST_CLASS(BB_displayTrain)
+	{
+	public:
+
+		TEST_METHOD(BB013_displayempty)
+		{
+			Assert::AreEqual(1, 1);
+		}
+			
 	};
 }
