@@ -180,11 +180,10 @@ namespace TrainYardTests
 			train t = { 0 };
 
 			addCar(&t, TYPE_ENGINE, 1000);
-			addCar(&t, TYPE_OIL, 500);
-
-			int result = checkTrainSafety(&t);
+			int result = addCar(&t, TYPE_OIL, 500);
 
 			Assert::AreEqual(0, result);
+			Assert::AreEqual(1, t.numOfCars);
 		}
 
 		TEST_METHOD(BB011_WoodNextToOilUnsafe)
@@ -194,11 +193,10 @@ namespace TrainYardTests
 
 			addCar(&t, TYPE_ENGINE, 1000);
 			addCar(&t, TYPE_WOOD, 500);
-			addCar(&t, TYPE_OIL, 500);
-
-			int result = checkTrainSafety(&t);
+			int result = addCar(&t, TYPE_OIL, 500);
 
 			Assert::AreEqual(0, result);
+			Assert::AreEqual(2, t.numOfCars);
 		}
 
 		TEST_METHOD(BB012_ValidTrainSafe)

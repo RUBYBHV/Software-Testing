@@ -61,6 +61,22 @@ int addCar(train* t, int type, float weight)
         }
     }
 
+    // Check adjacency rules before adding the car
+    if (t->numOfCars > 0) {
+        int lastType = t->cars[t->numOfCars - 1].type;
+
+        // Prevent WOOD next to OIL
+        if ((lastType == TYPE_WOOD && type == TYPE_OIL) ||
+            (lastType == TYPE_OIL && type == TYPE_WOOD)) {
+            return 0;
+        }
+    }
+
+    // Prevent OIL directly after engines
+    if (type == TYPE_OIL && t->numOfCars == t->numOfEngines) {
+        return 0;
+    }
+
     t->cars[t->numOfCars].type = type;
     t->cars[t->numOfCars].weight = weight;
     t->numOfCars++;
