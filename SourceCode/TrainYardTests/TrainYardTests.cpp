@@ -340,22 +340,68 @@ namespace TrainYardTests
 	public:
 		TEST_METHOD(IT001_AddAndSafetyValidation) 
 		{
-			Assert::IsTrue(true);
+			// Verifies that adding an invalid OIL car after engine is blocked and train remains safe
+			train t = { 0 };
+
+			int r1 = addCar(&t, TYPE_ENGINE, 1000);
+			int r2 = addCar(&t, TYPE_OIL, 500);
+
+			int safe = checkTrainSafety(&t);
+
+			Assert::AreEqual(1, r1);
+			Assert::AreEqual(0, r2);
+			Assert::AreEqual(1, safe);
 		}
 
 		TEST_METHOD(IT002_AddRemoveSafetyFlow)
 		{
-			Assert::IsTrue(true);
+			// Ensures that adding and removing cars maintains a valid and safe train configuration
+			train t = { 0 };
+
+			addCar(&t, TYPE_ENGINE, 1000);
+			addCar(&t, TYPE_WOOD, 500);
+			addCar(&t, TYPE_FOOD, 500);
+
+			int r = removeCar(&t, 2);
+
+			int safe = checkTrainSafety(&t);
+
+			Assert::AreEqual(1, r);
+			Assert::AreEqual(1, safe);
 		}
 
 		TEST_METHOD(IT003_EngineCapacityIntegration)
 		{
-			Assert::IsTrue(true);
+			// Verifies that engine pull capacity is enforced when adding freight cars
+			train t = { 0 };
+
+			addCar(&t, TYPE_ENGINE, 2000);
+			addCar(&t, TYPE_ENGINE, 2000);
+
+			int r = addCar(&t, TYPE_WOOD, 7000);
+
+			Assert::AreEqual(0, r);
 		}
 
 		TEST_METHOD(IT004_FullTrainWorkflow)
 		{
-			Assert::IsTrue(true);
+			// Simulates a full workflow of adding and removing cars while enforcing safety constraints
+			train t = { 0 };
+
+			addCar(&t, TYPE_ENGINE, 1000);
+			addCar(&t, TYPE_ENGINE, 1000);
+
+			addCar(&t, TYPE_FOOD, 500);
+			addCar(&t, TYPE_WOOD, 500);
+
+			int r1 = removeCar(&t, 2);
+			int r2 = addCar(&t, TYPE_OIL, 500);
+
+			int safe = checkTrainSafety(&t);
+
+			Assert::AreEqual(1, r1);
+			Assert::AreEqual(0, r2);
+			Assert::AreEqual(1, safe);
 		}
 	};
 }
