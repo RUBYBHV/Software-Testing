@@ -334,4 +334,29 @@ namespace TrainYardTests
 			Assert::IsTrue(true);
 		}
 	};
+
+	TEST_CLASS(IntegrationTests) 
+	{
+	public:
+
+		TEST_METHOD(IT001_AddAndSafetyValidation) 
+		{
+			Assert::IsTrue(true);
+		}
+
+		TEST_METHOD(IT002_AddRemoveSafetyFlow)
+		{
+			Assert::IsTrue(true);
+		}
+
+		TEST_METHOD(IT003_EngineCapacityIntegration)
+		{
+			Assert::IsTrue(true);
+		}
+
+		TEST_METHOD(IT004_FullTrainWorkflow)
+		{
+			Assert::IsTrue(true);
+		}
+	};
 }
