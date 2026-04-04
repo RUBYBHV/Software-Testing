@@ -338,7 +338,6 @@ namespace TrainYardTests
 	TEST_CLASS(IntegrationTests) 
 	{
 	public:
-
 		TEST_METHOD(IT001_AddAndSafetyValidation) 
 		{
 			Assert::IsTrue(true);
