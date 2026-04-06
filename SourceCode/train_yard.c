@@ -4,6 +4,7 @@
 
 int main(void) {
 
+   train t = { 0 };
    char choice = ' ';
 
     while (choice != 'Q' && choice != 'q') {
@@ -12,24 +13,55 @@ int main(void) {
 
         switch (choice) {
         case 'A': case 'a':
-            printf(">> Add a car\n");
+        {
+            int type;
+            float weight;
+
+            printf("Enter type (0=Engine,1=Food,2=Wood,3=Oil): ");
+            scanf("%d", &type);
+
+            printf("Enter weight: ");
+            scanf("%f", &weight);
+
+            if (addCar(&t, type, weight)) {
+                printf("Car added successfully.\n");
+            }
+            else {
+                printf("Failed to add car.\n");
+            }
             break;
+        }
 
         case 'R': case 'r':
-            printf(">> Remove a car\n");
+        {
+            int index;
+
+            printf("Enter index to remove: ");
+            scanf("%d", &index);
+
+            if (removeCar(&t, index)) {
+                printf("Car removed.\n");
+            }
+            else {
+                printf("Failed to remove car.\n");
+            }
             break;
+        }
 
         case 'V': case 'v':
-            printf(">> Display Train train cars\n");
+            displayTrain(&t);
             break;
 
         case 'W': case 'w':
-            printf(">> Show train cars and weight\n");
+            printf("Total Weight: %.1f\n", t.totalWeight);
             break;
 
         case 'S': case 's':
-            printf(">> Status: SAFE\n");
+        {
+            int safe = checkTrainSafety(&t);
+            printf("Status: %s\n", safe ? "SAFE" : "UNSAFE");
             break;
+         }
         }
     }
     return 0;
