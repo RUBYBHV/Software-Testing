@@ -84,6 +84,66 @@ namespace TrainYardTests
 			int result = addCar(&t, TYPE_ENGINE, 10.0f);
 			Assert::AreEqual(0, result);
 		}
+
+		TEST_METHOD(WB009_AddCarWeightExceedsMax)
+		{
+			// White-box test covering branch: if (t->totalWeight + weight > MAX_WEIGHT)
+			train t = { 0 };
+			t.totalWeight = MAX_WEIGHT;
+			t.numOfEngines = 1;
+
+			int result = addCar(&t, TYPE_WOOD, 10.0f);
+			Assert::AreEqual(0, result);
+		}
+
+		TEST_METHOD(WB010_AddCarPullCapExceeded)
+		{
+			// White-box test covering branch: if (t->totalWeight + weight > newNumOfEngines * ENGINE_PULL_CAP)
+			train t = { 0 };
+			t.numOfEngines = 1;
+			t.numOfCars = 1;
+			t.cars[0].type = TYPE_ENGINE;
+			t.totalWeight = ENGINE_PULL_CAP; // Engine is at capacity
+
+			int result = addCar(&t, TYPE_WOOD, 10.0f);
+			Assert::AreEqual(0, result);
+		}
+
+		TEST_METHOD(WB011_AddCarEngineAfterFreight)
+		{
+			// White-box test covering branch: if (type == TYPE_ENGINE) inside numOfCars > numOfEngines
+			train t = { 0 };
+			t.numOfEngines = 1;
+			t.numOfCars = 2; // more cars than engines implies freight exists
+			t.totalWeight = 1000.0f;
+
+			int result = addCar(&t, TYPE_ENGINE, 1000.0f);
+			Assert::AreEqual(0, result);
+		}
+
+		TEST_METHOD(WB012_AddCarWoodOilAdjacent)
+		{
+			// White-box test covering branch: WOOD next to OIL
+			train t = { 0 };
+			t.numOfCars = 2;
+			t.numOfEngines = 1;
+			t.cars[1].type = TYPE_WOOD;
+			
+			int result = addCar(&t, TYPE_OIL, 500.0f);
+			Assert::AreEqual(0, result);
+		}
+
+		TEST_METHOD(WB013_AddCarOilRightAfterEngine)
+		{
+			// White-box test covering branch: OIL directly after engines
+			train t = { 0 };
+			t.numOfEngines = 1;
+			t.numOfCars = 1;
+			t.cars[0].type = TYPE_ENGINE;
+
+			int result = addCar(&t, TYPE_OIL, 1000.0f);
+			Assert::AreEqual(0, result);
+		}
 	};
 
 	TEST_CLASS(BB_removeCar)
@@ -288,6 +348,38 @@ namespace TrainYardTests
 			int result = removeCar(&t, -1);
 			Assert::AreEqual(0, result);
 		}
+
+		TEST_METHOD(WB014_RemoveCarIndexTooHigh)
+		{
+			// White-box test covering branch: if (... || index >= t->numOfCars)
+			train t = { 0 };
+			addCar(&t, TYPE_ENGINE, 1000);
+			int result = removeCar(&t, 1);
+			Assert::AreEqual(0, result);
+		}
+
+		TEST_METHOD(WB015_RemoveCarWoodOilAdjacency)
+		{
+			// White-box test covering branch for WOOD-OIL adjacency caused by removal
+			train t = { 0 };
+			addCar(&t, TYPE_ENGINE, 1000);
+			addCar(&t, TYPE_WOOD, 500);
+			addCar(&t, TYPE_FOOD, 500);
+			addCar(&t, TYPE_OIL, 500);
+			int result = removeCar(&t, 2);
+			Assert::AreEqual(0, result);
+		}
+
+		TEST_METHOD(WB016_RemoveEngine)
+		{
+			// White-box test covering branch: if (t->cars[index].type == TYPE_ENGINE)
+			train t = { 0 };
+			addCar(&t, TYPE_ENGINE, 1000);
+			addCar(&t, TYPE_WOOD, 500);
+			int result = removeCar(&t, 0);
+			Assert::AreEqual(1, result);
+			Assert::AreEqual(0, t.numOfEngines);
+		}
 	};
 
 	TEST_CLASS(WB_checktrainsafety)
@@ -311,6 +403,40 @@ namespace TrainYardTests
 			int result = checkTrainSafety(&t);
 			Assert::AreEqual(1, result);
 		}
+
+		TEST_METHOD(WB017_CheckSafetyNoEngines)
+		{
+			// White-box test covering branch: if (t->numOfEngines == 0)
+			train t = { 0 };
+			t.numOfEngines = 0;
+			int result = checkTrainSafety(&t);
+			Assert::AreEqual(0, result);
+		}
+
+		TEST_METHOD(WB018_CheckSafetyOilFirstFreight)
+		{
+			// White-box test covering branch: if (t->cars[t->numOfEngines].type == TYPE_OIL)
+			train t = { 0 };
+			t.numOfCars = 2;
+			t.numOfEngines = 1;
+			t.cars[0].type = TYPE_ENGINE;
+			t.cars[1].type = TYPE_OIL;
+			int result = checkTrainSafety(&t);
+			Assert::AreEqual(0, result);
+		}
+
+		TEST_METHOD(WB019_CheckSafetyWoodOilAdjacent)
+		{
+			// White-box test covering loop branch matching WOOD/OIL adjacency
+			train t = { 0 };
+			t.numOfCars = 3;
+			t.numOfEngines = 1;
+			t.cars[0].type = TYPE_ENGINE;
+			t.cars[1].type = TYPE_WOOD;
+			t.cars[2].type = TYPE_OIL;
+			int result = checkTrainSafety(&t);
+			Assert::AreEqual(0, result);
+		}
 	};
 
 	TEST_CLASS(WB_displayTrain)
@@ -330,6 +456,16 @@ namespace TrainYardTests
 			train t = { 0 };
 			t.numOfCars = 0;
 			// Call should trigger the empty train print and return before the loop execution
+			displayTrain(&t);
+			Assert::IsTrue(true);
+		}
+
+		TEST_METHOD(WB020_DisplayTrainIterateCars)
+		{
+			// White-box test covering branch loop iteration: for (int i = 0; i < t->numOfCars; i++)
+			train t = { 0 };
+			addCar(&t, TYPE_ENGINE, 1000);
+			addCar(&t, TYPE_WOOD, 500);
 			displayTrain(&t);
 			Assert::IsTrue(true);
 		}
@@ -402,6 +538,93 @@ namespace TrainYardTests
 			Assert::AreEqual(1, r1);
 			Assert::AreEqual(0, r2);
 			Assert::AreEqual(1, safe);
+		}
+	};
+
+	TEST_CLASS(AcceptanceTests) 
+	{
+	public:
+		TEST_METHOD(AT001_REQ1_AddCarEngineFirst)
+		{
+			// Requirement: Engines appear only at the beginning
+			train t = { 0 };
+			addCar(&t, TYPE_ENGINE, 2000.0f);
+			addCar(&t, TYPE_WOOD, 1000.0f);
+			int r = addCar(&t, TYPE_ENGINE, 2000.0f); // Engine after freight
+			Assert::AreEqual(0, r);
+		}
+
+		TEST_METHOD(AT002_REQ2_AddCarMaxWeight)
+		{
+			// Requirement: System weight does not exceed the maximum (20000.0f)
+			train t = { 0 };
+			addCar(&t, TYPE_ENGINE, 4000.0f);
+			addCar(&t, TYPE_ENGINE, 4000.0f);
+			addCar(&t, TYPE_ENGINE, 4000.0f);
+			addCar(&t, TYPE_ENGINE, 4000.0f); // 16000 kg total
+			int r = addCar(&t, TYPE_WOOD, 5000.0f); // Would be 21000
+			Assert::AreEqual(0, r);
+		}
+
+		TEST_METHOD(AT003_REQ3_AddCarPullingCap)
+		{
+			// Requirement: Engine pulling capacity (5000 per engine) not exceeded
+			train t = { 0 };
+			addCar(&t, TYPE_ENGINE, 1000.0f);
+			int r = addCar(&t, TYPE_WOOD, 4500.0f); // 5500 total, exceeds 5000 
+			Assert::AreEqual(0, r);
+		}
+
+		TEST_METHOD(AT004_REQ4_RemoveCarSafely)
+		{
+			// Requirement: Function checks that removing a car does not violate safety conditions
+			train t = { 0 };
+			addCar(&t, TYPE_ENGINE, 2000.0f);
+			addCar(&t, TYPE_WOOD, 1000.0f);
+			addCar(&t, TYPE_FOOD, 1000.0f);
+			addCar(&t, TYPE_OIL, 1000.0f);
+			int r = removeCar(&t, 2); // Removing FOOD makes WOOD and OIL adjacent
+			Assert::AreEqual(0, r);
+		}
+
+		TEST_METHOD(AT005_REQ5_CheckSafetyHasEngine)
+		{
+			// Requirement: Train must have at least one engine
+			train t = { 0 };
+			t.numOfEngines = 0;
+			t.numOfCars = 1;
+			t.cars[0].type = TYPE_WOOD;
+			int r = checkTrainSafety(&t);
+			Assert::AreEqual(0, r);
+		}
+
+		TEST_METHOD(AT006_REQ6_CheckSafetyNoOilAfterEngine)
+		{
+			// Requirement: Must not have an oil car right after any engine car
+			train t = { 0 };
+			addCar(&t, TYPE_ENGINE, 2000.0f);
+			int r = addCar(&t, TYPE_OIL, 1000.0f);
+			Assert::AreEqual(0, r);
+		}
+
+		TEST_METHOD(AT007_REQ7_CheckSafetyNoWoodOilAdj)
+		{
+			// Requirement: No wood and oil cars next to each other
+			train t = { 0 };
+			addCar(&t, TYPE_ENGINE, 2000.0f);
+			addCar(&t, TYPE_WOOD, 1000.0f);
+			int r = addCar(&t, TYPE_OIL, 1000.0f);
+			Assert::AreEqual(0, r);
+		}
+
+		TEST_METHOD(AT008_REQ8_DisplayTrainOutput)
+		{
+			// Requirement: Function displays current train cars
+			train t = { 0 };
+			addCar(&t, TYPE_ENGINE, 2000.0f);
+			addCar(&t, TYPE_WOOD, 1000.0f);
+			displayTrain(&t); // Execute to ensure no crashes
+			Assert::IsTrue(true);
 		}
 	};
 }
