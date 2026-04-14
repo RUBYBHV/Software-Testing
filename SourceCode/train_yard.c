@@ -190,6 +190,15 @@ int checkTrainSafety(const train* t)
 
     return 1;
 }
+// Helper function for displayTrain() that converts car type into a readable string for display/view
+const char* getTypeName(int type)
+{
+    if (type == TYPE_ENGINE) return "Engine";
+    if (type == TYPE_FOOD)   return "Food";
+    if (type == TYPE_WOOD)   return "Wood";
+    if (type == TYPE_OIL)    return "Oil";
+    return "Unknown";
+}
 
 void displayTrain(const train* t) 
 {
@@ -206,9 +215,9 @@ void displayTrain(const train* t)
 
     // Print each car in order
     for (int i = 0; i < t->numOfCars; i++) {
-        printf("Car %d - Type: %d, Weight: %.1f\n",
+        printf("Car %d - Type: %s, Weight: %.1f\n",
             i,
-            t->cars[i].type,
+            getTypeName(t->cars[i].type),
             t->cars[i].weight);
     }
 
