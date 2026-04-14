@@ -2,7 +2,7 @@
 #include "CppUnitTest.h"
 
 extern "C" {
-#include "train_yard.h"
+#include "../train_yard.h"
 }
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
