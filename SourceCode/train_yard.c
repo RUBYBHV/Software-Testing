@@ -200,7 +200,7 @@ const char* getTypeName(int type)
     return "Unknown";
 }
 
-void displayTrain(const train* t) 
+void displayTrain(const train* t)
 {
     // Validate input
     if (t == NULL) {
